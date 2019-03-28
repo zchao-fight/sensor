@@ -80,7 +80,7 @@ public class Dust implements Runnable, SerialPortEventListener {
                         params.put("num", value);
                         HttpResult result = apiService.doPost(Constant.SERVER_IP_PORT_CONTEXT + "/api/saveDust.action", params);
                         if (result.getCode() == ResponseCodeConst.ERROR_PARAM.getCode()) {
-                            LOGGER.error("粉尘数据保存数据库失败,时间" + new Date().toLocaleString());
+                            LOGGER.error("粉尘数据保存数据库失败" + new Date().toLocaleString());
                         }
                     }
                 } catch (Exception readDataFromSerialPortFailure) {
