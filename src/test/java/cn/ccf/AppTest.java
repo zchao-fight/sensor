@@ -17,4 +17,10 @@ public class AppTest
     {
         assertTrue( true );
     }
+
+    @Test
+    public void testSoundDir() {
+        System.out.println(System.getProperty("user.dir"));
+        System.out.println(System.getProperty("file.separator"));
+    }
 }

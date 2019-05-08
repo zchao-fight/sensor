@@ -11,7 +11,7 @@ public class ErrorExecution {
                 uselessCardthread.start();
                 break;
             case 102:
-                AlarmSound haveBeenInFactoryAlarm = new AlarmSound(SystemConf.get("alarm.sound.haveBeenInFactory"));
+                AlarmSound haveBeenInFactoryAlarm = new AlarmSound(SystemConf.get("haveBeenInFactoryalarm.sound.haveBeenInFactory"));
                 Thread haveBeenInFactoryThread = new Thread(haveBeenInFactoryAlarm);
                 haveBeenInFactoryThread.start();
                 break;

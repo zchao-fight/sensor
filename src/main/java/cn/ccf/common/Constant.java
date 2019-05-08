@@ -13,5 +13,6 @@ public class Constant {
     public static final String SERVER_IP_PORT_CONTEXT = "http://" + SystemConf.get("server.ip") + ":" + SystemConf.get("server.port") + "/"
             + SystemConf.get("server.context.name");
 
+    public static final String USER_DIR = System.getProperty("user.dir");
 
 }
