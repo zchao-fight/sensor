@@ -70,11 +70,11 @@ public class Humiture implements SerialPortEventListener, Runnable {
                     for (int i = 0; i < Integer.parseInt(channelCount); i++) {
                         if (i % 2 == 0) {
                             // 计算温度
-                            String value = df.format((float) Integer.parseInt(hexString.substring(6 + 4 * i, 6 + (i + 1) * 4), 16) / 100 - 40);
+                            String value = df.format((float) Integer.parseInt(hexString.substring(6 + 4 * i, 6 + (i + 1) * 4), 16) / 125 - 20);
                             values[i] = value;
                         } else {
                             // 计算湿度
-                            String value = df.format((float) (Integer.parseInt(hexString.substring(6 + 4 * i, 6 + (i + 1) * 4), 16) - 2000) / 80);
+                            String value = df.format((float) (Integer.parseInt(hexString.substring(6 + 4 * i, 6 + (i + 1) * 4), 16)) / 100);
                             values[i] = value;
                         }
                     }

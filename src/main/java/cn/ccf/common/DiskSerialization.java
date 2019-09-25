@@ -25,7 +25,11 @@ public class DiskSerialization extends Thread {
     public void run() {
         File file = new File(Constant.SWIPE_NUMBER_DIR);
         if (!file.exists()) {
-            file.mkdirs();
+            try {
+                file.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
         try {

@@ -1,5 +1,8 @@
 package cn.ccf.httpclient;
 
+/**
+ * @author charles
+ */
 public class HttpResult {
 
     private Integer code;

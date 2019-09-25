@@ -28,8 +28,6 @@ public class Infrared implements Runnable, SerialPortEventListener {
 
     private Person person;
 
-    private Integer infraredCount = 0;
-
     private SerialPort serialPort;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Infrared.class);
@@ -91,12 +89,14 @@ public class Infrared implements Runnable, SerialPortEventListener {
                             response = new String(bytes);
                             if (StringUtils.startsWith(response, "!01")) { // 校验合理性 发送报警灯指令与红外读取指令返回值合并，出错
                                 try {
-                                    infraredCount = Integer.valueOf(response.substring(3, 8));
-                                    if (infraredCount > person.getTotal()) {
+                                    int tempInfraredCount = Integer.valueOf(response.substring(3, 8));
+                                    if (tempInfraredCount > person.getTotal()) {
                                         // 视频抓拍
                                         capturePicture();
+                                        System.out.println("红外次数："+tempInfraredCount +":抓拍");
                                         ErrorExecution.handle(104); // 报警
-                                        person.setTotal(infraredCount);
+                                        person.setTotal(tempInfraredCount);
+                                        person.setInfraredCount(tempInfraredCount);
                                     }
                                 } catch (NumberFormatException e) {
                                     if (StringUtils.equals(response, "!01\r!0100") || StringUtils.equals(response, "!01\r>\r!01")) {

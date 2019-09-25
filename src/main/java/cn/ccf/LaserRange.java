@@ -6,7 +6,7 @@ import cn.ccf.common.SerialPortManager;
 import cn.ccf.common.SystemConf;
 import cn.ccf.httpclient.ApiService;
 import cn.ccf.httpclient.HttpResult;
-import cn.ccf.utils.Conversion;
+import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
 import gnu.io.SerialPort;
 import gnu.io.SerialPortEvent;
 import gnu.io.SerialPortEventListener;
@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 public class LaserRange implements SerialPortEventListener, Runnable {
 
@@ -65,17 +66,23 @@ public class LaserRange implements SerialPortEventListener, Runnable {
                         if (StringUtils.startsWith(content, "F:Er")) {
                             LOGGER.error(new Date() + "激光测量数据错误");
                         } else {
-                            String distance = content.substring(3,8);
-                            String unit = "m";
+                            String distance = content.substring(2, 8);
+//                            System.out.println(Thread.currentThread().getName() + "#" + content);
 
-                            Map<String, String> params = new HashMap<>();
-                            params.put("sensorId", laserNum);
-                            params.put("unit", unit);
-                            params.put("sensorType", "laser");
-                            params.put("num", distance);
-                            HttpResult result = apiService.doPost(Constant.SERVER_IP_PORT_CONTEXT + "/api/saveLaser.action", params);
-                            if (result.getCode() == ResponseCodeConst.ERROR_PARAM.getCode()) {
-                                LOGGER.error("激光数据保存数据库失败" + new Date().toLocaleString());
+                            boolean flag = Pattern.matches("\\d{1,2}\\.\\d{3}", distance.trim());
+                            if (flag) {
+
+                                String unit = "m";
+
+                                Map<String, String> params = new HashMap<>();
+                                params.put("sensorId", laserNum);
+                                params.put("unit", unit);
+                                params.put("sensorType", "laser");
+                                params.put("num", distance.trim());
+                                HttpResult result = apiService.doPost(Constant.SERVER_IP_PORT_CONTEXT + "/api/saveLaser.action", params);
+                                if (result.getCode() == ResponseCodeConst.ERROR_PARAM.getCode()) {
+                                    LOGGER.error("激光数据保存数据库失败" + new Date().toLocaleString());
+                                }
                             }
                         }
                     }

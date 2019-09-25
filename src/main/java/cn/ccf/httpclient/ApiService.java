@@ -23,6 +23,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * http请求
+ *
+ * @author charles
+ */
 public class ApiService {
 
     private static RequestConfig requestConfig;
@@ -40,7 +45,7 @@ public class ApiService {
         // 设置最大连接数
         cm.setMaxTotal(200);
         // 设置每个主机地址的并发数
-        cm.setDefaultMaxPerRoute(20);
+        cm.setDefaultMaxPerRoute(50);
 
         // 开启清理空闲连接
         new IdleConnectionEvictor(cm).start();

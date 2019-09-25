@@ -3,6 +3,9 @@ package cn.ccf.httpclient;
 import java.io.IOException;
 import java.util.Map;
 
+/**
+ * @author charles
+ */
 public class HttpClient extends Thread {
 
     private String url;

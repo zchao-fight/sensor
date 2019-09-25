@@ -16,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TooManyListenersException;
@@ -60,7 +61,9 @@ public class SwipeCardIn implements SerialPortEventListener, Runnable {
                     String hexString = Conversion.bytes2HexString(bytes);
                     if (!hexString.startsWith("02") || !hexString.endsWith("0D0A03")) {
                         LOGGER.error("卡号错误");
-                        Broadcast.play(SystemConf.get("alarm.sound.uselessCard"));
+                        // todo delete
+//                        Broadcast.play(SystemConf.get("alarm.sound.uselessCard"));
+                        Broadcast.play(Constant.USER_DIR + SystemConf.get("alarm.sound.uselessCard"));
                         break;
                     }
 
@@ -74,7 +77,7 @@ public class SwipeCardIn implements SerialPortEventListener, Runnable {
 
                     // 刷卡进入人数超过最大值 > 目的：防止更改定员人数错误
                     if ((person.getCount() + 1) > person.getQuota()) {
-                        AlarmSound alarmSound = new AlarmSound(SystemConf.get("alarm.sound.OutOfLimit"));
+                        AlarmSound alarmSound = new AlarmSound(Constant.USER_DIR + SystemConf.get("alarm.sound.OutOfLimit"));
                         Thread thread = new Thread(alarmSound);
                         thread.start();
                         break;
@@ -109,6 +112,7 @@ public class SwipeCardIn implements SerialPortEventListener, Runnable {
                             closeDoorThread = new Thread(() -> {
                                 try {
                                     Thread.sleep(Integer.parseInt(SystemConf.get("close.door.internal")));
+                                    person.setTotal(person.getInfraredCount());
                                     String command = "#011300" + Constant.LINE_SEPARATOR; // 控制单个数字信号输出
                                     SerialPortManager.sendToPort(IOModule.getSerialPort(), command.getBytes());
                                 } catch (InterruptedException | SendDataToSerialPortFailure | SerialPortOutputStreamCloseFailure e) {
@@ -150,6 +154,10 @@ public class SwipeCardIn implements SerialPortEventListener, Runnable {
 //        Hex.encodeHexString()
         int temp = Integer.parseInt("00BD065C", 16);
         System.out.println(temp);
+
+
+        String workId = Conversion.hexStr2Str("3839413638353832");
+        System.out.println(Long.parseLong(workId, 16));
 
     }
 }

@@ -92,7 +92,20 @@ public class Conversion {
         return ret;
     }
 
+    public static String hexToBinary(String hexStr) {
+        Integer num = Integer.parseInt(hexStr, 16);
+        return Integer.toBinaryString(num);
+
+    }
+
     public static void main(String[] args) {
+
+        int bina = 0b0001;
+        System.out.println(bina);
+        System.out.println(1 & 8);
+
+        System.out.println(hexToBinary("E"));
+
         //字符串转16进制byte数组
         String str16 = "010400000002";
         byte[] bytes = Conversion.hexToByte(str16);

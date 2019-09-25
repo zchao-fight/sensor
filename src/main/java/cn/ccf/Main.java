@@ -23,21 +23,18 @@ public class Main {
 
         Person person = new Person();
 
-        startSwipeCardModule(person); // 启动刷卡模块
+        // 启动刷卡模块
+        startSwipeCardModule(person);
 
         startSensor(Gas.class, "gas");
         startSensor(Resistance.class, "resistance");
         startSensor(Dust.class, "dust");
         startSensor(LaserRange.class, "laser");
         startSensor(Humiture.class, "humiture");
-
+        startSensor(Proximity.class, "proximity");
 
         TCPServer tcpServer = new TCPServer(person, Integer.parseInt(SystemConf.get("swipe.tcp.port")));
         tcpServer.startServer();
-
-
-
-
 
       /*
         ArrayList<String> port = SerialPortManager.findPort();
@@ -46,8 +43,9 @@ public class Main {
     }
 
     private static Boolean isMathced(String ports, String nums) {
-        return StringUtils.isNotEmpty(ports) && StringUtils.isNotEmpty(nums)
-                && ports.split(",").length == nums.split(",").length;
+            return StringUtils.isNotEmpty(ports) && StringUtils.isNotEmpty(nums)
+                    && ports.split(",").length == nums.split(",").length;
+
     }
 
     private static <T extends Runnable> void startSensor(Class<T> clazz, String type) {
@@ -88,19 +86,29 @@ public class Main {
             return;
         }
 
+        if (StringUtils.equals(type, "proximity")) {
+            String proximityPorts = SystemConf.get("proximity.port");
+            String proximityNums = SystemConf.get("proximity.number");
+            String proximityCount = SystemConf.get("proximity.count");
+
+            Proximity proximity = new Proximity(proximityPorts, proximityNums, Integer.parseInt(proximityCount));
+            Thread laserThread = new Thread(proximity);
+            laserThread.start();
+            return;
+        }
 
         String ports = SystemConf.get(type + ".port");
         String nums = SystemConf.get(type + ".number");
         String addrs = SystemConf.get(type + ".addr");
 
         if (isMathced(ports, nums)) {
-            String[] PortArray = ports.split(",");
-            String[] NumArray = nums.split(",");
-            String[] AddrArray = addrs.split(",");
+            String[] portArray = ports.split(",");
+            String[] numArray = nums.split(",");
+            String[] addrArray = addrs.split(",");
             try {
                 Constructor<T> constructor = clazz.getConstructor(String.class, String.class, String.class);
-                for (int i = 0; i < PortArray.length; i++) {
-                    T t = constructor.newInstance(PortArray[i], NumArray[i], AddrArray[i]);
+                for (int i = 0; i < numArray.length; i++) {
+                    T t = constructor.newInstance(portArray[i], numArray[i], addrArray[i]);
                     Thread sensorThread = new Thread(t);
                     sensorThread.start();
                 }

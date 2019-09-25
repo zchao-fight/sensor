@@ -2,6 +2,11 @@ package cn.ccf.httpclient;
 
 import org.apache.http.conn.HttpClientConnectionManager;
 
+/**
+ * 线程 关闭空闲http连接
+ *
+ * @author charles
+ */
 public class IdleConnectionEvictor extends Thread {
 
     private final HttpClientConnectionManager connMgr;

@@ -17,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TooManyListenersException;
@@ -61,7 +62,7 @@ public class SwipeCardOut implements Runnable, SerialPortEventListener {
                     String hexString = Conversion.bytes2HexString(bytes);
                     if (!hexString.startsWith("02") || !hexString.endsWith("0D0A03")) {
                         LOGGER.error("卡号错误");
-                        Broadcast.play(SystemConf.get("alarm.sound.uselessCard"));
+                        Broadcast.play(Constant.USER_DIR + SystemConf.get("alarm.sound.uselessCard"));
                         break;
                     }
 
